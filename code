@@ -1,3 +1,4 @@
+#miss data情况
 def missing_statistics(df):    
     statitics = pd.DataFrame(df.isnull().sum()).reset_index()
     statitics.columns=['COLUMN NAME',"MISSING VALUES"]
