@@ -1,0 +1,6 @@
+def missing_statistics(df):    
+    statitics = pd.DataFrame(df.isnull().sum()).reset_index()
+    statitics.columns=['COLUMN NAME',"MISSING VALUES"]
+    statitics['TOTAL ROWS'] = df.shape[0]
+    statitics['% MISSING'] = round((statitics['MISSING VALUES']/statitics['TOTAL ROWS'])*100,2)
+    return statitics
