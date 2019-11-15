@@ -5,3 +5,23 @@ def missing_statistics(df):
     statitics['TOTAL ROWS'] = df.shape[0]
     statitics['% MISSING'] = round((statitics['MISSING VALUES']/statitics['TOTAL ROWS'])*100,2)
     return statitics
+    
+# miss data基本填充方法
+def impute_NA_with_avg(data,strategy='mean',NA_col=[]):
+    """
+    replacing the NA with mean/median/most frequent values of that variable. 
+    Note it should only be performed over training set and then propagated to test set.
+    """
+    
+    data_copy = data.copy(deep=True)
+    for i in NA_col:
+        if data_copy[i].isnull().sum()>0:
+            if strategy=='mean':
+                data_copy[i] = data_copy[i].fillna(data[i].mean())
+            elif strategy=='median':
+                data_copy[i] = data_copy[i].fillna(data[i].median())
+            elif strategy=='mode':
+                data_copy[i] = data_copy[i].fillna(data[i].mode()[0])
+        else:
+            print ("Column %s has no missing" % i)
+    return data_copy  
