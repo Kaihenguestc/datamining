@@ -25,3 +25,13 @@ def impute_NA_with_avg(data,strategy='mean',NA_col=[]):
         else:
             print ("Column %s has no missing" % i)
     return data_copy  
+    
+#one hot 独热编码=================================================================================
+combined_train_test['Sex'] = pd.factorize(combined_train_test['Sex'])[0]
+sex_dummies_df = pd.get_dummies(combined_train_test['Sex'], prefix=combined_train_test[['Sex']].columns[0])
+combined_train_test = pd.concat([combined_train_test, sex_dummies_df], axis=1)
+
+#------------------------------------------------------------------------------------
+le = LabelEncoder()
+building.primary_use = le.fit_transform(building.primary_use)
+#================================================================================
