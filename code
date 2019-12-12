@@ -35,3 +35,13 @@ combined_train_test = pd.concat([combined_train_test, sex_dummies_df], axis=1)
 le = LabelEncoder()
 building.primary_use = le.fit_transform(building.primary_use)
 #================================================================================
+对目标进行log处理：
+def target_log(data):
+    data[ycol]=np.log(data[ycol]+1)
+    return data
+
+def target_exp(data):
+    data[ycol]=np.exp(data[ycol])-1
+    return data
+
+#============================
