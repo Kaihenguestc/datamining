@@ -45,3 +45,22 @@ def target_exp(data):
     return data
 
 #============================
+   for col in cate_cols:
+        if col == f or col == 'guid':
+            continue
+        print(col)
+        df = df.merge(tmp[col].agg({
+          '{}_{}_nunique'.format(f, col): 'nunique',
+          '{}_{}_ent'.format(f, col): lambda x: entropy(x.value_counts() / x.shape[0]), # 熵
+          '{}_{}_mode'.format(f, col): lambda x: x.mode()[0] # 众数（即出现次数最多的item）
+        }).reset_index(), on=f, how='left')
+        df = df.merge(df.groupby([f, col], as_index=False)['id'].agg({
+          '{}_{}_count'.format(f, col): 'count' # 共现次数
+        }), on=[f, col], how='left')
+        df['{}_{}_count_ratio'.format(col, f)] = df['{}_{}_count'.format(f, col)] / df[f + '_count'] # 比例偏好
+        df['{}_{}_count_ratio'.format(f, col)] = df['{}_{}_count'.format(col, f)] / df[col + '_count'] # 比例偏好
+        df['{}_{}_nunique_ratio_{}_count'.format(f, col, f)] = df['{}_{}_nunique'.format(f, col)] / df[f + '_count']
+        df['{}_{}_mode_count'.format(f, col)] = df['{}_{}_mode'.format(f, col)].map(df['{}_{}_mode'.format(f, col)].value_counts())
+        mode_cols.append('{}_{}_mode'.format(f, col))
+        print('runtime:', time.time() - t)
+ #====================================
